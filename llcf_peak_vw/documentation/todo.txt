@@ -1,0 +1,9 @@
+Stand: 05.01.2006
+
+1. Modus "ListenOnly" testen.
+2. Herausziehen des PCAN-USB im laufenden Betrieb an aufrufende Programme signalisieren.
+3. SysFS für Kernel 2.6.x besser integrieren 
+
+
+
+

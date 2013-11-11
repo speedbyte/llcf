@@ -1,0 +1,104 @@
+#----------------------------------------------------------------
+# spec file for peak-linux-driver made by Klaus Hitschler
+#
+# support for kernel 2.6.15     02.03.2006      Hi
+# release 3.28
+#
+Name:        peak-linux-driver
+Version:     20060302
+Release:     3.28
+Summary:     CAN driver and library with kernel 2.2 to 2.6 support, english manual
+Source:      %{name}.%{release}.tar.gz
+Group:       System Environment/Kernel
+Copyright:   GPL / LGPL / Proprietary
+Packager:    Peak System Technik GmbH <linux@peak-system.com> <www.peak-system.com>, Klaus Hitschler <klaus.hitschler@gmx.de>
+URL:         www.peak-system.com
+
+%description
+Driver, library and test programs  to support the PCAN-PCI, PCAN-ISA, PCAN-PC/104, PCAN-Dongle and PCAN-USB CAN interface hardware of Peak System-Technik GmbH.
+
+%prep
+
+%setup -n %{name}-%{release}
+
+%build
+KERNEL=$(uname -r)
+KVERSION=$(echo $KERNEL | sed -e 's;\([1-9]\)\..*;\1;g' )
+KPATCHLEVEL=$(echo $KERNEL | sed -e 's;[1-9]\.\([0-9]\{0,3\}\)\..*;\1;g' )
+if [ $KVERSION -gt 2 ] || [ $KVERSION -eq 2 ] && [ $KPATCHLEVEL -ge 6 ]  ;
+  then 
+    echo "/lib/modules/$KERNEL/misc/pcan.ko" > driverfile ; 
+    MODCONF=$(echo "/etc/modprobe.conf")
+    MODINST=$(echo "install pcan /sbin/modprobe --ignore-install pcan; /usr/local/bin/pcan_make_devices 2")
+  else 
+    echo "/lib/modules/$KERNEL/misc/pcan.o"  > driverfile ; 
+    MODCONF=$(echo "/etc/modules.conf")
+    MODINST=$(echo "post-install pcan /usr/local/bin/pcan_make_devices 2")
+fi ;
+make clean
+make all
+
+%install
+make install
+
+%files -f driverfile
+%defattr(-,root,root)
+/usr/lib*/libpcan.so*
+/usr/include/pcan.h
+/usr/include/libpcan.h
+/usr/local/bin/receivetest
+/usr/local/bin/transmitest
+/usr/local/bin/bitratetest
+/usr/local/bin/pcan_make_devices
+%doc Documentation/Installation-en.pdf
+%doc Documentation/COPYING
+
+%post
+KERNEL=$(uname -r)
+KVERSION=$(echo $KERNEL | sed -e 's;\([1-9]\)\..*;\1;g')
+KPATCHLEVEL=$(echo $KERNEL | sed -e 's;[1-9]\.\([0-9]\{0,3\}\)\..*;\1;g')
+if [ $KVERSION -gt 2 ] || [ $KVERSION -eq 2 ] && [ $KPATCHLEVEL -ge 6 ]  ;
+  then 
+    MODCONF=/etc/modprobe.conf
+    MODINST="install pcan /sbin/modprobe --ignore-install pcan; /usr/local/bin/pcan_make_devices 2"
+  else 
+    MODCONF=/etc/modules.conf
+    MODINST="post-install pcan /usr/local/bin/pcan_make_devices 2"
+fi ;
+if test -z $(grep -l pcan $MODCONF); then\
+	cp $MODCONF $MODCONF~;\
+	echo ""                                                >> $MODCONF;\
+	echo "# pcan - automatic made entry, begin --------"   >> $MODCONF;\
+	echo "# options pcan type=isa,sp # see documentation"  >> $MODCONF;\
+	echo $MODINST                                          >> $MODCONF;\
+	echo "# pcan - automatic made entry, end ----------"   >> $MODCONF;\
+	echo ""                                                >> $MODCONF;\
+fi ;
+/sbin/depmod
+
+%postun
+KERNEL=$(uname -r)
+KVERSION=$(echo $KERNEL | sed -e 's;\([1-9]\)\..*;\1;g')
+KPATCHLEVEL=$(echo $KERNEL | sed -e 's;[1-9]\.\([0-9]\{0,3\}\)\..*;\1;g')
+if [ $KVERSION -gt 2 ] || [ $KVERSION -eq 2 ] && [ $KPATCHLEVEL -ge 6 ]  ;
+  then 
+    MODCONF=/etc/modprobe.conf
+  else 
+    MODCONF=/etc/modules.conf
+fi ;
+# cp $MODCONF~ $MODCONF
+/sbin/depmod
+/sbin/ldconfig
+
+
+
+
+
+
+
+
+
+
+
+
+

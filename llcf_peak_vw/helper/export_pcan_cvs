@@ -1,0 +1,13 @@
+#!/bin/sh
+if test $1
+then
+	rm -Rf ~/tmp/peak-linux-driver-$1
+	cvs export ~/work/peak/peak-linux-driver ~/tmp/peak-linux-driver-$1
+	cd ~/tmp
+	tar -czf ~/work/peak/tarballs/peak-linux-driver.org.$1.tar.gz peak-linux-driver-$1/*
+	rm -R peak-linux-driver-$1/helper
+	tar -czf ~/work/peak/tarballs/peak-linux-driver.$1.tar.gz peak-linux-driver-$1/*
+else
+ echo "usage:  ./export_pcan_cvs 'version'"
+fi
+

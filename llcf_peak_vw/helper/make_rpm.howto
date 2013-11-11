@@ -1,0 +1,19 @@
+Wie mache ich ein RPM?
+
+1. Schritt: Erzeuge einen Abzug aus dem Repository in ein Verzeichnis.
+cvs -d /usr/repository/peak -q export -D now -d peak-linux-driver-1.40 peak-linux-driver
+
+2. Schritt: Mache einen tarball daraus.
+tar -czf ../work/peak/tarballs/peak-linux-driver.1.40.tar.gz peak-linux-driver-1.40/*
+
+3. Schritt: Kopiere den tarball nach /usr/src/packages/SOURCES
+
+4. Schritt: Editiere die .spec Datei. (nach z.B. -1.40)
+
+5. Schritt: Kopiere die .spec Datei nach /usr/src/packages/SPEC
+
+6. Schritt: Gehe als root nach /usr/src/packages/SPEC und rufe
+rpm -ba peak-linux-driver-1.40.spec
+
+7. Schritt: Fertig
+

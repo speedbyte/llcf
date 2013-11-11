@@ -1,0 +1,73 @@
+#  *
+#  * Process.txt
+#  *
+#  * Copyright (c) 2002-2005 Schefenacker Innovation GmBH, Germany
+#  * All rights reserved.
+#  *
+#  *
+#  * Send feedback to <vikas.agrawal@web.de>
+#  
+# ****************************************************************************
+#  * Process.txt - Description for the different modules
+#  *
+#  * $Id: Process.txt  2006-08-28 ( yy-mm-dd) agrawal $
+# ****************************************************************************
+#  *
+#  * Description for the different modules
+#  * $Log: Process.txt,v $
+#  * Revision 1.0  2006/08/28 22:03:29  agrawal
+#  * Initial Revision
+#  *
+# *****************************************************************************
+
+
+in .bashrc.
+PYTHONSTARTUP=/home/guitar/.pystartup"
+export PYTHONSTARTUP
+Save the file pystartup with name .pystartup in put it in the location as dscribed by  PYTHONSTARTUP
+
+
+Copy the entire folder ( Delivery ) to a location
+run the script systempathappend.py to add the path to the Pythonypath ( Caution with unix and windows )
+
+
+
+
+--------------------------
+User Files:
+
+candump.py = start the candump to view the messages on the can bus
+                import candump or reload(candump) 
+                all the messages on the CAN bus wud be immediately visible
+                
+EMC_check.py = file for ping pong of CAN message between the Fujitsu for electromagnetic check at EMC...
+                import EMC_check or reload(EMC_check)
+                EMC_check.send_raw()
+                the messages are sent and recieved. On non recieve of message in desired time, a error signal is written into a log file with a time stamp.
+
+create a socket : socket = llcf.SOCKET()
+create a frame :  frame = llcf.FRAME()
+socket.send(f), socket.recv(), socket.close()
+
+recv structure:
+
+recv_frame = socket.recv()
+
+recv_frame[0] = CANID
+recv_frame[1] = DLC
+recv_frame[2] = 'can0' or relevant sockets
+recv_frame[3] = array of Datas
+------------------------
+LogFiles:
+
+dump.txt - a file created by invoking candump. Achtung ! , the file is overwritten with the next import / reload of candump
+
+--------------------------
+System Files:
+
+llcfmodule.c = an extension module to wrap the LLCF drivers. 
+llcf.py = for llcf functionality please import the file in the user script
+
+
+---------------------------
+
