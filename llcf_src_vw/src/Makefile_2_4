@@ -41,18 +41,17 @@
 #  Send feedback to <llcf@volkswagen.de>
 
 
-KERNELDIR1 = /usr/src/linux-headers-2.6.32-5-686
-KERNELDIR = /usr/src/linux
-
 CFLAGS    = -O2 -Wall -Wno-parentheses -D__KERNEL__ -DMODULE $(DEBUG) \
-		-I$(KERNELDIR)/include -I$(KERNELDIR1)/include -fno-strict-aliasing
+		-I$(KERNELDIR)/include -fno-strict-aliasing
+KERNELDIR = /usr/src/linux
 
 #VERSION       = $(shell awk '/^VERSION/     {print $$3}' $(KERNELDIR)/Makefile)
 #PATCHLEVEL    = $(shell awk '/^PATCHLEVEL/  {print $$3}' $(KERNELDIR)/Makefile)
 #SUBLEVEL      = $(shell awk '/^SUBLEVEL/    {print $$3}' $(KERNELDIR)/Makefile)
 #EXTRAVERSION  = $(shell awk '/^EXTRAVERSION/{print $$3}' $(KERNELDIR)/Makefile)
 #KERNELRELEASE = $(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
-KERNELRELEASE = 2.6.32-5-686
+KERNELRELEASE = 2.4.27
+
 MODLIB := $(INSTALL_MOD_PATH)/lib/modules/$(KERNELRELEASE)/llcf
 
 MOD_GPL = can.o vcan.o can-bcm.o can-raw.o
